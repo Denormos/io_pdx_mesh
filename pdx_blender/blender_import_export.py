@@ -121,9 +121,13 @@ def get_rig_from_mesh(blender_obj):
 
 def list_scene_pdx_meshes():
     # restrict to current scene, so use bpy.context.scene.objects not bpy.data.objects
-    return [
+    objects = [
         obj for obj in bpy.context.scene.objects if isinstance(obj.data, bpy.types.Mesh) and check_mesh_material(obj)
     ]
+
+    objects.sort(key=lambda obj: obj.data.name)
+
+    return objects
 
 
 def set_local_axis_display(state, data_type):
