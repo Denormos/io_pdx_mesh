@@ -1312,6 +1312,9 @@ def export_meshfile(meshpath, exp_mesh=True, exp_skel=True, exp_locs=True, exp_s
         # sort meshes for export by index
         blender_meshes.sort(key=lambda obj: get_mesh_index(obj.data))
 
+        #DENORMOS: CHANGE LATER
+        object_xml.set("loddist", [0.0, 100.0, 200.0])
+
         for i, obj in enumerate(blender_meshes):
             # create parent element for node data, if exporting meshes
             obj_name = obj.data.name
