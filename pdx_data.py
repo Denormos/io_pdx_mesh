@@ -408,8 +408,8 @@ def write_meshfile(filepath, root_xml):
         current_depth = 1
         datastring += writeObject(object_xml, current_depth)
 
-        #DENORMOS: CHANGE LATER
-        #datastring += writeProperty("loddist", object_xml.get("loddist"))
+        if object_xml.get("loddist") is not None:
+            datastring += writeProperty("loddist", object_xml.get("loddist"))
 
         # write each shape node
         for shape_xml in object_xml:

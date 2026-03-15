@@ -672,7 +672,6 @@ def create_shader(PDX_material, shader_name, texture_dir, template_only=False):
     new_shader.use_nodes = True
 
     new_shader.use_backface_culling = True
-    new_shader.shadow_method = "CLIP"
     new_shader.blend_method = "CLIP"
 
     def set_node_pos(node, x, y):
@@ -1276,7 +1275,7 @@ def import_meshfile(meshpath, imp_mesh=True, imp_skel=True, imp_locs=True, join_
 
 
 @allow_debug_logging
-def export_meshfile(meshpath, exp_mesh=True, exp_skel=True, exp_locs=True, exp_selected=False, **kwargs):
+def export_meshfile(meshpath, exp_mesh=True, exp_skel=True, exp_locs=True, exp_selected=False, exp_lod=False, lod_string="", **kwargs):
     # kwargs wrangling
     # export mesh(es) as blendshapes
     as_blendshape = kwargs.get("as_blendshape", False)
@@ -1312,8 +1311,10 @@ def export_meshfile(meshpath, exp_mesh=True, exp_skel=True, exp_locs=True, exp_s
         # sort meshes for export by index
         blender_meshes.sort(key=lambda obj: get_mesh_index(obj.data))
 
-        #DENORMOS: CHANGE LATER
-        object_xml.set("loddist", [0.0, 100.0, 200.0])
+        if exp_lod:
+            lod_array = lod_string.split(sep= ", ")
+            lod_array = [float(num) for num in lod_array]
+            object_xml.set("loddist", lod_array)
 
         for i, obj in enumerate(blender_meshes):
             # create parent element for node data, if exporting meshes

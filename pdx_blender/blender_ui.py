@@ -499,6 +499,17 @@ class IOPDX_OT_export_mesh(Operator, ExportHelper):
         description="Filter export by selection",
         default=False,
     )
+    chk_lod: BoolProperty(
+        name="Levels of Detail",
+        description="Use Levels of Detail",
+        default=False,
+    )
+    str_lods: StringProperty(
+        name="Distances",
+        description="Set Levels of Detail distances",
+        default="0, 100, 200",
+        maxlen=255,
+    )
     chk_debug: BoolProperty(
         name="[debug options]",
         description="Non-standard options",
@@ -538,6 +549,12 @@ class IOPDX_OT_export_mesh(Operator, ExportHelper):
         box.prop(self, "chk_skel")
         box.prop(self, "chk_locs")
         box.prop(self, "chk_selected")
+        box.prop(self, "chk_lod")
+        if self.chk_lod:
+            lod_settings = box.box()
+            split = lod_settings.split(factor=0.1)
+            _, col = split.column(), split.column()
+            col.prop(self, "str_lods")
         box.prop(self, "chk_debug")
         if self.chk_debug:
             debug_settings = box.box()
@@ -557,6 +574,8 @@ class IOPDX_OT_export_mesh(Operator, ExportHelper):
                 exp_locs=self.chk_locs,
                 exp_selected=self.chk_selected,
                 as_blendshape=self.chk_mesh_blendshape,
+                exp_lod=self.chk_lod,
+                lod_string=self.str_lods,
                 debug_mode=self.chk_debug,
                 split_verts=self.chk_split_vtx,
                 sort_verts=self.ddl_sort_vtx,
